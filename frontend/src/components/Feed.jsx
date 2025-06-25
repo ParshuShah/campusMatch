@@ -48,14 +48,14 @@ const Feed = () => {
   // }
 
    // Show loading state if feed is empty
-   if (feed.length === 0) {
-    return <h1 className="text-center mt-10">Loading...</h1>;
+   if (feed.length <= 0) {
+    return <h1 className="text-center mt-10"> No new Users found!.. </h1>;
   }
 
   return (
     <div className="flex justify-center my-10">
     {feed[0] ? (
-      <UserCard user={feed[0]} />
+      <UserCard user={feed[0]} checkvalue={true} />
     ) : (
       <div className="alert alert-warning">
         Feed loaded but no user data found. Check API response format.

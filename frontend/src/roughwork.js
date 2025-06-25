@@ -1,3 +1,38 @@
+
+<div className="card bg-base-100 w-96 shadow-sm">
+<figure>
+    <img
+        src={user.photoURL || "https://media.istockphoto.com/id/1336021035/photo/black-and-white-color-cat-looking-at-camera-curiosity.jpg?s=2048x2048&w=is&k=20&c=_G7Fxv6qO_DShw16yH8nRVU6JqHve3egCrUvNu6oTyA="}
+        alt="Shoes" className='w-full h-full object-cover' />
+</figure>
+<div className="card-body">
+    <h2 className="card-title">{firstName + " " + lastName}</h2>
+    {age && gender && <p>{age + ", " + gender}</p>}
+    <p>{about}</p>
+    <div className="card-actions justify-center my-4">
+        <button className="btn btn-secondary rounded-sm">Ignore</button>
+        <button className="btn btn-primary rounded-sm">Interested</button>
+    </div>
+</div>
+</div>
+
+//the above code is of my userCard if you get any erro then jst past the above code and that's all'
+
+
+//body = 
+<div className="flex flex-col min-h-screen">
+<NavBar />
+<main className="flex-grow">
+  <Outlet />
+</main>
+<Footer />
+</div>
+
+
+
+
+//Login Page 
+
 import React from 'react'
 import { useState } from 'react';
 import axios from 'axios';
