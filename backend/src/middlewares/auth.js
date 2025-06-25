@@ -2,6 +2,8 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 const { escape } = require("validator");
 
+//NOt doing anything just experimenting the git push
+
 const userAuth = async(req, res, next) => {
     try{
         const {token} = req.cookies;
