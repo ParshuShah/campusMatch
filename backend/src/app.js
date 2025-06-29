@@ -5,8 +5,10 @@ const port = 4444;
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 
+require("dotenv").config();
+
 app.use(cors({
-    origin: "*",
+    origin: ["http://localhost:5173", "http://13.53.212.125"],
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
