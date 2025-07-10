@@ -5,7 +5,11 @@ const port = 4444;
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 
+const http = require("http"); // For socket.io support
+
 require("dotenv").config();
+
+// require("./utils/cronjob");  not need it is for the email thing
 
 app.use(cors({
     origin: ["http://localhost:5173", "http://13.53.212.125"],
@@ -24,17 +28,23 @@ const profileRouter = require("./routes/profile");
 const requestRouter = require("./routes/request");
 const userRouter = require("./routes/user");
 
+const initializeSocket = require("./utils/socket");
+const chatRouter = require("./routes/chat");
+
 app.use("/", authRouter);
 app.use("/", profileRouter);
 app.use("/", requestRouter);
 app.use("/", userRouter);
+app.use("/", chatRouter);
 
+const server = http.createServer(app);
+initializeSocket(server);
 
 //Established the DB Connection...
 connectDB().then(
     () => {
         console.log("Database connnection Established...");
-        app.listen(port, () => {
+        server.listen(port, () => {
             console.log(`Server is listening on port ${port}`)
         });
     }).catch((err) => {

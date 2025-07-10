@@ -1,41 +1,42 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, Navigate } from 'react-router';
-import { Mail, Lock, Eye, EyeOff, Heart } from 'lucide-react';
+import { Mail, Lock, User, Heart } from 'lucide-react';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { addUser } from '../utils/userSlice';
 import { BASE_URL } from '../utils/constants';
 import { useSelector } from 'react-redux';
 
-const Login = () => {
-
-
+const Signup = () => {
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [emailId, setEmailId] = useState('');
   const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  // Inside your Signup component
+
   const user = useSelector((store) => store.user);
 
   if (user && user._id) {
-    navigate('/app/feed');
-    return;
+    return <Navigate to="/app/feed" replace />;
   }
 
-  const handleLogin = async (e) => {
+
+  const handleSignUp = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     try {
       const res = await axios.post(
-        BASE_URL + '/login',
-        { emailId, password },
+        BASE_URL + '/signup',
+        { firstName, lastName, emailId, password },
         { withCredentials: true }
       );
-      dispatch(addUser(res.data));
-      navigate('/app/feed');
+      dispatch(addUser(res.data.data));
+      navigate('/profile');
     } catch (err) {
       setError(err?.response?.data || 'Something went wrong');
     } finally {
@@ -48,8 +49,8 @@ const Login = () => {
       {/* Animated Background */}
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=%2240%22 height=%2240%22 viewBox=%220 0 40 40%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cg fill=%22none%22 fill-rule=%22evenodd%22%3E%3Cg fill=%22%23ffffff%22 fill-opacity=%220.1%22%3E%3Cpath d=%22M20 20c0-5.5-4.5-10-10-10s-10 4.5-10 10 4.5 10 10 10 10-4.5 10-10zm10 0c0-5.5-4.5-10-10-10s-10 4.5-10 10 4.5 10 10 10 10-4.5 10-10z%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] animate-pulse"></div>
-        <div className="absolute top-20 right-10 w-32 h-32 bg-white/10 rounded-full animate-float"></div>
-        <div className="absolute bottom-20 left-10 w-24 h-24 bg-white/10 rounded-full animate-float delay-1000"></div>
+        <div className="absolute top-1/4 right-10 w-32 h-32 bg-white/10 rounded-full animate-float"></div>
+        <div className="absolute bottom-1/4 left-10 w-24 h-24 bg-white/10 rounded-full animate-float delay-1000"></div>
       </div>
 
       {/* Header */}
@@ -78,10 +79,10 @@ const Login = () => {
             </div>
 
             <Link
-              to="/signup"
+              to="/login"
               className="bg-gradient-to-r from-purple-600 to-pink-500 text-white px-4 py-2 rounded-full font-medium hover:shadow-lg hover:shadow-purple-500/30 transition-all duration-300"
             >
-              Sign Up
+              Sign In
             </Link>
           </div>
         </div>
@@ -92,7 +93,7 @@ const Login = () => {
         <div className="w-full max-w-md">
           <div className="bg-gray-800/80 backdrop-blur-sm rounded-3xl shadow-xl p-8 border border-purple-900/50 relative overflow-hidden">
             {/* Decorative Elements */}
-            <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-purple-500/10 to-pink-500/10 rounded-full -translate-y-16 translate-x-16"></div>
+            <div className="absolute top-0 left-0 w-40 h-40 bg-gradient-to-br from-purple-500/10 to-pink-500/10 rounded-full -translate-y-20 -translate-x-20"></div>
             
             <div className="relative z-10">
               <div className="text-center mb-8">
@@ -100,9 +101,9 @@ const Login = () => {
                   <Heart className="w-10 h-10 text-white" />
                 </div>
                 <h1 className="text-3xl font-bold text-white">
-                  Welcome Back!
+                  Join CampusMatch
                 </h1>
-                <p className="text-gray-400 mt-2">Sign in to continue your journey</p>
+                <p className="text-gray-400 mt-2">Create your account and start connecting!</p>
               </div>
 
               {error && (
@@ -111,14 +112,38 @@ const Login = () => {
                 </div>
               )}
 
-              <form onSubmit={handleLogin} className="space-y-6">
+              <form onSubmit={handleSignUp} className="space-y-4">
+                <div className="relative group">
+                  <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 group-focus-within:text-purple-400 transition-colors" />
+                  <input
+                    type="text"
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
+                    className="w-full pl-12 pr-4 py-3 bg-gray-700/50 border border-gray-600 rounded-2xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 text-white placeholder-gray-400"
+                    placeholder="First Name"
+                    required
+                  />
+                </div>
+
+                <div className="relative group">
+                  <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 group-focus-within:text-purple-400 transition-colors" />
+                  <input
+                    type="text"
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
+                    className="w-full pl-12 pr-4 py-3 bg-gray-700/50 border border-gray-600 rounded-2xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 text-white placeholder-gray-400"
+                    placeholder="Last Name"
+                    required
+                  />
+                </div>
+
                 <div className="relative group">
                   <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 group-focus-within:text-purple-400 transition-colors" />
                   <input
                     type="email"
                     value={emailId}
                     onChange={(e) => setEmailId(e.target.value)}
-                    className="w-full pl-12 pr-4 py-4 bg-gray-700/50 border border-gray-600 rounded-2xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 text-white placeholder-gray-400"
+                    className="w-full pl-12 pr-4 py-3 bg-gray-700/50 border border-gray-600 rounded-2xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 text-white placeholder-gray-400"
                     placeholder="Email address"
                     required
                   />
@@ -127,41 +152,34 @@ const Login = () => {
                 <div className="relative group">
                   <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 group-focus-within:text-purple-400 transition-colors" />
                   <input
-                    type={showPassword ? 'text' : 'password'}
+                    type="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full pl-12 pr-12 py-4 bg-gray-700/50 border border-gray-600 rounded-2xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 text-white placeholder-gray-400"
+                    className="w-full pl-12 pr-4 py-3 bg-gray-700/50 border border-gray-600 rounded-2xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 text-white placeholder-gray-400"
                     placeholder="Password"
                     required
                   />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-300 transition-colors"
-                  >
-                    {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-                  </button>
                 </div>
 
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full bg-gradient-to-r from-purple-600 to-pink-500 text-white py-4 rounded-2xl font-semibold text-lg shadow-lg hover:shadow-xl hover:shadow-purple-500/30 transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none relative overflow-hidden group"
+                  className="w-full bg-gradient-to-r from-purple-600 to-pink-500 text-white py-4 rounded-2xl font-semibold text-lg shadow-lg hover:shadow-xl hover:shadow-purple-500/30 transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none mt-6 relative overflow-hidden group"
                 >
                   <span className="relative z-10">
-                    {isLoading ? 'Signing in...' : 'Sign In'}
+                    {isLoading ? 'Creating Account...' : 'Create Account'}
                   </span>
                 </button>
               </form>
 
-              <div className="mt-8 text-center">
+              <div className="mt-6 text-center">
                 <p className="text-gray-400">
-                  Don't have an account?{' '}
+                  Already have an account?{' '}
                   <Link
-                    to="/signup"
+                    to="/login"
                     className="text-purple-400 hover:text-purple-300 font-semibold transition-colors"
                   >
-                    Sign up
+                    Sign in
                   </Link>
                 </p>
               </div>
@@ -173,4 +191,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Signup;
