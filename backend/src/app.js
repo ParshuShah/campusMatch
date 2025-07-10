@@ -12,7 +12,7 @@ require("dotenv").config();
 // require("./utils/cronjob");  not need it is for the email thing
 
 app.use(cors({
-    origin: ["http://localhost:5173", "http://13.53.212.125", "https://campusmatch.vercel.app/"],
+    origin: ["http://localhost:5173", "http://13.53.212.125", "https://campusmatch.vercel.app"],
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
